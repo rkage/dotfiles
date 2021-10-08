@@ -15,7 +15,11 @@ end
 fish_add_path "{{ .chezmoi.homeDir }}/Library/Python/3.9/bin"
 fish_add_path "{{ .chezmoi.homeDir }}/.krew/bin"
 
-{{- if (eq .chezmoi.os "darin") }}
+{{- if (eq .chezmoi.os "linux") }}
+eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+{{- end }}
+
+{{- if (eq .chezmoi.os "darwin") }}
 set -gx HOMEBREW_NO_ANALYTICS 1
 
 fish_add_path "/usr/local/sbin"
