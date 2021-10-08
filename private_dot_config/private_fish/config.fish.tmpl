@@ -1,0 +1,32 @@
+set -gx KUBE_EDITOR vim
+set -gx EDITOR vim
+set -gx VISUAL $EDITOR
+
+set -gx PROJECTS {{ .chezmoi.homeDir }}/Projects
+
+if type -q flux
+  flux completion fish | source
+end
+
+if type -q helm
+  helm competion fish | source
+end
+
+fish_add_path "{{ .chezmoi.homeDir }}/Library/Python/3.9/bin"
+fish_add_path "{{ .chezmoi.homeDir }}/.krew/bin"
+
+{{- if (eq .chezmoi.os "darin") }}
+set -gx HOMEBREW_NO_ANALYTICS 1
+
+fish_add_path "/usr/local/sbin"
+
+test -r "$HOME/.dir_colors" && eval (gdircolors -c $HOME/.dir_colors)
+
+alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
+
+abbr -a kx kubectx
+abbr -a kn kubens
+
+test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish ; or true
+
+{{- end }}
