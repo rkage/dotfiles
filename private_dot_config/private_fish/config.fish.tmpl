@@ -4,14 +4,6 @@ set -gx VISUAL $EDITOR
 
 set -gx PROJECTS {{ .chezmoi.homeDir }}/Projects
 
-if type -q flux
-  flux completion fish | source
-end
-
-if type -q helm
-  helm completion fish | source
-end
-
 fish_add_path "{{ .chezmoi.homeDir }}/Library/Python/3.9/bin"
 fish_add_path "{{ .chezmoi.homeDir }}/.krew/bin"
 
