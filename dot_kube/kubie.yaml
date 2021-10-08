@@ -1,0 +1,12 @@
+shell: fish
+configs:
+  include:
+  - ~/.kube/config
+prompt:
+  disable: true
+  show_depth: true
+  fish_use_rprompt: false
+behaviour:
+  validate_namespaces: true
+  print_context_in_exec: auto
+
