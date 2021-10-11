@@ -1,3 +1,3 @@
-if type -q chezmoi
+if command -qs chezmoi
     chezmoi completion fish | source
 end

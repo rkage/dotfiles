@@ -1,3 +1,3 @@
-if type -q flux
+if command -qs flux
     flux completion fish | source
 end

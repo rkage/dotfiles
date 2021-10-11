@@ -1,3 +1,3 @@
-if type -q stern
+if command -qs stern
     stern --completion fish | source
 end
