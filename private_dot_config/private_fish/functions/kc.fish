@@ -1,3 +1,5 @@
 function kc --wraps=kubecolor --description="shorthand for kubecolor"
-    kubecolor $argv
+    if type -q kubecolor
+        kubecolor $argv
+    end
 end
