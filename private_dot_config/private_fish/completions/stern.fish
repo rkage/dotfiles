@@ -1,3 +1,3 @@
 if type -q stern
-  stern --completion fish | source
+    stern --completion fish | source
 end

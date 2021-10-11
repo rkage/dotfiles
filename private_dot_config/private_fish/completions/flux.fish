@@ -1,3 +1,3 @@
 if type -q flux
-  flux completion fish | source
+    flux completion fish | source
 end

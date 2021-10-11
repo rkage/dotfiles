@@ -1,3 +1,3 @@
 if type -q chezmoi
-  chezmoi completion fish | source
+    chezmoi completion fish | source
 end
