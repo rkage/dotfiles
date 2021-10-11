@@ -1,5 +1,5 @@
-function k --wraps=kubectl --description 'shorthand for kubectl'
-  kubectl $argv
+function k --wraps=kubectl --description="shorthand for kubectl"
+    kubectl $argv
 end
 
 abbr -a -U sk 'kubectl -n kube-system'
