@@ -4,44 +4,17 @@ set -gx VISUAL $EDITOR
 
 set -gx PROJECTS {{ .chezmoi.homeDir }}/Projects
 
-fish_add_path "{{ .chezmoi.homeDir }}/Library/Python/3.9/bin"
-fish_add_path "{{ .chezmoi.homeDir }}/.krew/bin"
+fish_add_path {{ .chezmoi.homeDir }}/.krew/bin
 
-{{- if (eq .chezmoi.os "linux") }}
+{{ if eq .chezmoi.os "linux" -}}
 eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+{{ end -}}
 
-{{   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
-set -x SSH_AUTH_SOCK "$HOME/.ssh/agent.sock"
-if not ss -a | grep -q "$SSH_AUTH_SOCK"
-    rm -f "$SSH_AUTH_SOCK"
-    set wsl2_ssh_pageant_bin "$HOME/.ssh/wsl2-ssh-pageant.exe"
-    if test -x "$wsl2_ssh_pageant_bin"
-        setsid nohup socat UNIX-LISTEN:"$SSH_AUTH_SOCK,fork" EXEC:"$wsl2_ssh_pageant_bin" >/dev/null 2>&1 &
-    else
-        echo >&2 "WARNING: $wsl2_ssh_pageant_bin is not executable."
-    end
-    set --erase wsl2_ssh_pageant_bin
-end
-
-set -x GPG_AGENT_SOCK "$HOME/.gnupg/S.gpg-agent"
-if not ss -a | grep -q "$GPG_AGENT_SOCK"
-    rm -rf "$GPG_AGENT_SOCK"
-    set wsl2_ssh_pageant_bin "$HOME/.ssh/wsl2-ssh-pageant.exe"
-    if test -x "$wsl2_ssh_pageant_bin"
-        setsid nohup socat UNIX-LISTEN:"$GPG_AGENT_SOCK,fork" EXEC:"$wsl2_ssh_pageant_bin --gpg S.gpg-agent" >/dev/null 2>&1 &
-    else
-        echo >&2 "WARNING: $wsl2_ssh_pageant_bin is not executable."
-    end
-    set --erase wsl2_ssh_pageant_bin
-end
-{{-   end}}
-
-{{- end }}
-
-{{- if (eq .chezmoi.os "darwin") }}
+{{ if (eq .chezmoi.os "darwin") -}}
 set -gx HOMEBREW_NO_ANALYTICS 1
 
-fish_add_path "/usr/local/sbin"
+fish_add_path /usr/local/sbin
+fish_add_path {{ .chezmoi.homeDir }}/Library/Python/3.9/bin
 
 test -r "$HOME/.dir_colors" && eval (gdircolors -c $HOME/.dir_colors)
 
@@ -52,7 +25,7 @@ abbr -a kn kubens
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish ; or true
 
-{{- end }}
+{{ end -}}
 
 if status is-interactive
     and not set -q TMUX
