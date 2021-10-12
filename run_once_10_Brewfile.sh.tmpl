@@ -1,16 +1,24 @@
+#!{{ .bash }}
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
 tap "dty1er/tap"
 tap "fluxcd/tap"
+brew "bat"
+brew "direnv"
 brew "dty1er/tap/kubecolor"
 brew "fish"
 brew "fluxcd/tap/flux"
-brew "chezmoi"
-brew "direnv"
+brew "fzf"
 brew "git"
+brew "git-delta"
 brew "helm"
+brew "jq"
 brew "kubernetes-cli"
+brew "krew"
 brew "kubie"
 brew "kustomize"
 brew "lsd"
 brew "pre-commit"
 brew "stern"
 brew "terraform"
+EOF
