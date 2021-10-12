@@ -1,0 +1,27 @@
+[alias]
+    co = checkout
+    g = grep --break --heading --line-number
+    gi = grep --break --heading --line-number -i
+[core]
+    pager = delta
+[delta]
+    syntax-theme = Nord
+    line-numbers = true
+    decorations = true
+[gpg]
+{{- if eq .chezmoi.os "darwin" }}
+    program = /usr/local/bin/gpg
+{{- else if eq .chezmoi.os "linux" }}
+    program = /usr/bin/gpg
+{{- end }}
+[init]
+    defaultBranch = main
+[interactive]
+    diffFilter = delta --color-only
+[pager]
+    branch = false
+[pull]
+    ff = only
+[url "git@github.com:"]
+    insteadOf = http://github.com
+    insteadOf = https://github.com
