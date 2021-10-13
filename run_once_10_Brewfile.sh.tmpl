@@ -19,6 +19,14 @@ brew "kubie"
 brew "kustomize"
 brew "lsd"
 brew "pre-commit"
+brew "starship"
 brew "stern"
 brew "terraform"
+brew "tmux"
+{{ if eq .chezmoi.os "darwin" -}}
+brew "mas"
+brew "gnupg@2.2"
+brew "pinentry-mac"
+brew "vim"
+{{ end -}}
 EOF
