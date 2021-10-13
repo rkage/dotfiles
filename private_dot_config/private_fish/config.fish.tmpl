@@ -8,6 +8,8 @@ fish_add_path {{ .chezmoi.homeDir }}/.krew/bin
 
 {{ if eq .chezmoi.os "linux" -}}
 eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
+starship init fish | source
 {{ end -}}
 
 {{ if (eq .chezmoi.os "darwin") -}}
