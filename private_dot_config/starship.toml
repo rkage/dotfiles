@@ -1,14 +1,24 @@
 add_newline = false
 
-format = """\
-  $username\
-  $directory\
-  $kubernetes\
-  $git_branch\
-  $git_state\
-  $git_status\
-  $character\
-  """
+format = """
+$username\
+$hostname\
+$directory\
+$kubernetes\
+$git_branch\
+$git_state\
+$git_status\
+$character"""
+
+[username]
+show_always = false
+format = "[$user]($style) "
+
+[hostname]
+disabled = false
+ssh_only = true
+format = "@ [$hostname]($style) "
+style = "blue"
 
 [character]
 success_symbol = "[❯](bold green)"
@@ -17,3 +27,4 @@ error_symbol = "[✗](bold red)"
 [directory]
 truncation_length = 5
 truncate_to_repo = true
+read_only	= " 🔒"
