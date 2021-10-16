@@ -1,0 +1,19 @@
+add_newline = false
+
+format = """\
+  $username\
+  $directory\
+  $kubernetes\
+  $git_branch\
+  $git_state\
+  $git_status\
+  $character\
+  """
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[✗](bold red)"
+
+[directory]
+truncation_length = 5
+truncate_to_repo = true
