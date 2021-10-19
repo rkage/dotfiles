@@ -1,0 +1,14 @@
+function watch --description="watch with fish alias support"
+    if count $argv > /dev/null
+        if command -qs viddy
+            viddy -t -n 2 --shell fish $argv[1..-1]
+        else
+  {{- if eq .chezmoi.os "linux" }}
+            /usr/bin/watch --color --exec fish --command="$argv"
+  {{- else if eq .chezmoi.os "darwin" }}
+            /usr/local/bin/watch --color --exec fish --command="$argv"
+  {{- end }}
+        end
+    end
+end
+
