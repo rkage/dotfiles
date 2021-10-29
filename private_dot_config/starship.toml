@@ -5,10 +5,12 @@ $username\
 $hostname\
 $directory\
 $kubernetes\
-$git_branch\
-$git_state\
-$git_status\
 $character"""
+
+right_format = """
+$git_state\
+$git_branch\
+$git_status"""
 
 [username]
 show_always = false
@@ -21,10 +23,20 @@ format = "@ [$hostname]($style) "
 style = "blue"
 
 [character]
-success_symbol = "[❯](bold green)"
-error_symbol = "[✗](bold red)"
+success_symbol = "[❯](purple)"
+error_symbol = "[✗](red)"
 
 [directory]
+style = "blue"
 truncation_length = 5
 truncate_to_repo = true
-read_only	= " 🔒"
+truncation_symbol = "../"
+read_only	= " "
+
+[git_branch]
+format = "[$branch]($style) "
+style = "yellow"
+
+[git_status]
+style = "red"
+
