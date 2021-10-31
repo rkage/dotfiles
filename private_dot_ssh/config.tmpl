@@ -10,7 +10,7 @@ Host *
   ServerAliveInterval 5
   ServerAliveCountMax 1
 {{- if (eq .chezmoi.os "darwin") }}
-  IgnoreUnkown UseKeychain
+  IgnoreUnknown UseKeychain
   UseKeychain yes
 {{- end }}
 
