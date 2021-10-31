@@ -2,6 +2,10 @@ set -gx KUBE_EDITOR vim
 set -gx EDITOR vim
 set -gx VISUAL $EDITOR
 set -gx PROJECTS {{ .chezmoi.homeDir }}/Projects
+set -x GPG_TTY (tty)
+set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+gpgconf --launch gpg-agent
+
 set -g fish_key_bindings fish_vi_key_bindings
 set -g fish_bind_mode insert
 
