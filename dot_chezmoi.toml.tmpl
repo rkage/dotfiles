@@ -1,0 +1,24 @@
+{{/* boolean flags */}}
+{{- $headless := false -}}{{/* true if this machine is without keyboard or display */}}
+{{- $personal := false -}}{{/* true if this machine should have personal secrets from 1password */}}
+{{- "" -}}
+
+{{- $hostname := .chezmoi.hostname -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $computerName := output "scutil" "--get" "ComputerName" | trim -}}
+{{-   if eq $computerName "Nick’s MacBook Pro" -}}
+{{-     $hostname = "Nicks-MBP" -}}
+{{-   else -}}
+{{-     $hostname = $computerName -}}
+{{-   end -}}
+{{- end -}}
+
+{{- if eq $hostname "Nicks-MBP" -}}
+{{-   $personal = true -}}
+{{- end -}}
+
+[data]
+  headless = {{ $headless }}
+  hostname = {{ $hostname | quote }}
+  personal = {{ $personal }}
+  vault = "r4rtmrkd5kjrwytac2g2ji442a"
