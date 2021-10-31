@@ -1,8 +1,11 @@
 set -gx KUBE_EDITOR vim
 set -gx EDITOR vim
 set -gx VISUAL $EDITOR
-
 set -gx PROJECTS {{ .chezmoi.homeDir }}/Projects
+set -g fish_key_bindings fish_vi_key_bindings
+set -g fish_bind_mode insert
+
+bind -M insert \cg forget
 
 fish_add_path -aP {{ .chezmoi.homeDir }}/.krew/bin
 
@@ -10,24 +13,19 @@ starship init fish | source
 
 {{ if eq .chezmoi.os "linux" -}}
 eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-
 {{ else if eq .chezmoi.os "darwin" }}
 set -gx HOMEBREW_NO_ANALYTICS 1
 
 fish_add_path /usr/local/sbin
 fish_add_path {{ .chezmoi.homeDir }}/Library/Python/3.9/bin
 
-test -r "$HOME/.dir_colors" && eval (gdircolors -c $HOME/.dir_colors)
-
 alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
 abbr -a kx kubectx
 abbr -a kn kubens
-
-test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish ; or true
 {{ end -}}
 
 if status is-interactive
-    and not set -q TMUX
+and not set -q TMUX
     tmux new-session -A -s main
 end
