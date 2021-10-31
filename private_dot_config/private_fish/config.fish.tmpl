@@ -6,10 +6,10 @@ set -gx PROJECTS {{ .chezmoi.homeDir }}/Projects
 
 fish_add_path -aP {{ .chezmoi.homeDir }}/.krew/bin
 
+starship init fish | source
+
 {{ if eq .chezmoi.os "linux" -}}
 eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-
-starship init fish | source
 
 {{ else if eq .chezmoi.os "darwin" }}
 set -gx HOMEBREW_NO_ANALYTICS 1
