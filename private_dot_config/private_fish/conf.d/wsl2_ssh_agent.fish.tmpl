@@ -1,4 +1,5 @@
-{{ if .chezmoi.kernel.osrelease | lower | contains "microsoft" -}}
+{{ if eq .chezmoi.os "linux" -}}
+{{   if .chezmoi.kernel.osrelease | lower | contains "microsoft" -}}
 set -x SSH_AUTH_SOCK "$HOME/.ssh/agent.sock"
 if not ss -a | grep -q "$SSH_AUTH_SOCK"
     rm -f "$SSH_AUTH_SOCK"
@@ -22,4 +23,5 @@ if not ss -a | grep -q "$GPG_AGENT_SOCK"
     end
     set --erase wsl2_ssh_pageant_bin
 end
+{{   end }}
 {{ end }}
