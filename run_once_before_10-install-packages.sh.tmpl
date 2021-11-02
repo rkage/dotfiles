@@ -5,10 +5,9 @@ set -eufo pipefail
 {{ $taps := list
       "dty1er/tap"
       "fluxcd/tap"
-      "go-task/tap"
--}}
+      "go-task/tap" -}}
 
-{{- $bundle := list
+{{ $bundle := list
       "ansible"
       "bat"
       "clusterctl"
@@ -36,29 +35,31 @@ set -eufo pipefail
       "terraform"
       "tmux"
       "viddy"
-      "yq"
--}}
+      "yq" -}}
 
 {{- $casks := list -}}
 
 {{- if eq .chezmoi.os "darwin" -}}
 {{-   $casks = concat $casks (list
+        "docker"
+        "google-chrome"
         "iterm2"
         "visual-studio-code"
         "1password-cli"
-        "balenaetcher"
-        "raspberry-pi-imager"
-        "google-cloud-sdk"
-        "whatsapp"
-        "signal"
-) -}}
+        "google-cloud-sdk") -}}
 {{-   $bundle = concat $bundle (list
         "mas"
         "gnupg"
         "gnupg@2.2"
         "pinentry-mac"
-        "vim"
-) -}}
+        "vim") -}}
+{{-   if .personal -}}
+{{-     $casks = concat $casks (list
+          "balenaetcher"
+          "raspberry-pi-imager"
+          "whatsapp"
+          "signal") -}}
+{{-   end -}}
 {{- end -}}
 
 brew bundle --no-lock --file=/dev/stdin <<EOF
