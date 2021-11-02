@@ -6,11 +6,11 @@ set -eufo pipefail
 # reqest and store the sudo credentials for 5 minutes
 sudo -v
 
-{{ if eq .chezmoi.os "darwin" -}}
-echo /usr/local/bin/fish | sudo tee -a /etc/shells
-sudo chsh -s /usr/local/bin/fish $(whoami)
-{{ else -}}
-echo /home/linuxbrew/bin/fish | sudo tee -a /etc/shells
-sudo chsh -s /home/linuxbrew/bin/fish $(whoami)
-{{ end -}}
+{{ $brewBinDir := "/usr/local/bin" -}}
+{{- if eq .chezmoi.os "linux" -}}
+{{- $brewBinDir = "/home/linuxbrew/bin" -}}
+{{- end -}}
+
+echo {{ $brewBinDir }}/fish | sudo tee -a /etc/shells
+sudo chsh -s {{ $brewBinDir }}/fish $(whoami)
 {{ end -}}
