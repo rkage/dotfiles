@@ -1,0 +1,108 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env bash
+
+### Drew inspiration from the following repos
+# https://github.com/mathiasbynens/dotfiles/blame/master/.macos
+# https://github.com/twpayne/dotfiles/blob/master/run_onchange_after_90-configure-darwin.sh.tmpl
+# https://github.com/herrbischoff/awesome-macos-command-line#contents
+# https://gitlab.com/katrinleinweber/dotfiles/-/blob/main/run_once_set-macos-up.sh.tmpl
+
+set -eufo pipefail
+
+### General UX/UI Settings
+defaults write NSGlobalDomain AppleInterfaceStyle Dark
+
+# localization settings
+defaults write NSGlobalDomain AppleLanguages -array en-CA
+defaults write NSGlobalDomain AppleLocale en_CA
+
+# Disable automatic capitalization & "smart" punctuation (System Preferences | Keyboard | Text)
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+
+defaults write NSGlobalDomain NSLinguisticDataAssetsRequested -array en en_CA en_US
+defaults write NSGlobalDomain NSUserDictionaryReplacementItems -array
+
+# Keyboard Settings, set key repeat Fast
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
+defaults write NSGlobalDomain KeyRepeat -int 2
+
+### Finder Settings
+# Show icons for hard drives, servers, and removable media on the desktop
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+
+# Show all filename extensions & disable warning when changing them
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+# Show status & path bars
+defaults write com.apple.finder ShowStatusBar -bool true
+defaults write com.apple.finder ShowPathbar -bool true
+
+# Keep folders on top when sorting by name
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+# When performing a search, search the current folder. Default is search 'This Mac' (SCev)
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+# Don't creat .DS_Store files on network or USB volumes
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+# Default to list view, other modes: as Icons (icnv), as Columns (clmv), as Gallery (glyv)
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+
+### Safari Settings
+## General
+# Prevent Safari from opening ‘safe’ files automatically after downloading
+defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+
+## Tabs
+#Tab Layout, Compact mode
+defaults write com.apple.Safari ShowStandaloneTabBar -bool false
+defaults write com.apple.Safari EnableNarrowTabs -bool true
+
+## Autofill
+# Only autofill from my address book
+defaults write com.apple.Safari AutoFillFromAddressBook -bool true
+defaults write com.apple.Safari AutoFillPasswords -bool false
+defaults write com.apple.Safari AutoFillCreditCardData -bool false
+defaults write com.apple.Safari AutoFillMiscellaneousForms -bool false
+
+## Search
+# (Privacy) Don’t send search queries to Apple
+defaults write com.apple.Safari UniversalSearchEnabled -bool false
+defaults write com.apple.Safari SuppressSearchSuggestions -bool true
+
+## Security
+# Warn about fraudulent websites
+defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool false
+
+## Privacy
+# Enable “Do Not Track”
+defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
+
+## Extensions
+# Update extensions automatically
+defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -bool true
+
+## Advanced
+# Show the full URL in the address bar (note: this still hides the scheme)
+defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool false
+
+# Enable the Develop menu and the Web Inspector in Safari
+defaults write com.apple.Safari IncludeDevelopMenu -bool true
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+
+# Enable continuous spellchecking but without auto-correct
+defaults write com.apple.Safari WebContinuousSpellCheckingEnabled -bool true
+defaults write NSGlobalDomain WebAutomaticSpellingCorrectionEnabled -bool false
+
+{{ end -}}
