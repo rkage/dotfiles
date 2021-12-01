@@ -17,13 +17,12 @@ bind -M insert \cg forget
 fish_add_path -aP {{ .chezmoi.homeDir }}/.krew/bin
 
 starship init fish | source
+direnv hook fish | source
+
+set -Ux fish_tmux_autostart false
+set -Ux fish_tmux_autoconnect false
 
 {{ if .personal -}}
 set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
 gpgconf --launch gpg-agent
 {{- end }}
-
-if status is-interactive
-and not set -q TMUX
-    exec tmux new-session -A -s main
-end
