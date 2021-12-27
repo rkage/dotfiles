@@ -8,7 +8,7 @@ sudo -v
 
 {{ $brewBinDir := "/usr/local/bin" -}}
 {{- if eq .chezmoi.os "linux" -}}
-{{- $brewBinDir = "/home/linuxbrew/bin" -}}
+{{- $brewBinDir = "/home/linuxbrew/.linuxbrew/bin" -}}
 {{- end -}}
 
 echo {{ $brewBinDir }}/fish | sudo tee -a /etc/shells
