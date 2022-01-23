@@ -22,7 +22,10 @@ direnv hook fish | source
 set -Ux fish_tmux_autostart false
 set -Ux fish_tmux_autoconnect false
 
-{{ if .personal -}}
+{{- if .personal -}}
+{{-   if eq .chezmoi.os "darwin" -}}
 set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
 gpgconf --launch gpg-agent
+{{-   end }}
 {{- end }}
+
