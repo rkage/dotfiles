@@ -17,6 +17,8 @@
 {{-   $personal = true -}}
 {{- end -}}
 
+sourceDir = "{{ .chezmoi.homeDir }}/Projects/rkage/dotfiles"
+
 [data]
   headless = {{ $headless }}
   hostname = {{ $hostname | quote }}
