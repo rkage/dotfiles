@@ -1,0 +1,17 @@
+{{ if eq .chezmoi.os "linux" -}}
+{{   if .chezmoi.kernel.osrelease | lower | contains "microsoft" -}}
+set -x SSH_AUTH_SOCK "$HOME/.ssh/agent.sock"
+if not ss -a | grep -q "$SSH_AUTH_SOCK"
+    rm -f "$SSH_AUTH_SOCK"
+    set NPIPERELAY_BIN "$HOME/winhome/.wsl/npiperelay.exe"
+    set ONEPASSWORD_SSH_SOCK "//./pipe/openssh-ssh-agent"
+    if test -x "$NPIPERELAY_BIN"
+        setsid nohup socat UNIX-LISTEN:"$SSH_AUTH_SOCK",fork EXEC:"$NPIPERELAY_BIN -ei -s '$ONEPASSWORD_SSH_SOCK'",nofork >/dev/null 2>&1 &
+        disown
+    else
+        echo >&2 "WARNING: $NPIPERELAY_BIN is not executable."
+    end
+    set --erase NPIPERELAY_BIN
+end
+{{   end -}}
+{{ end -}}
