@@ -1,8 +1,12 @@
-{{/* boolean flags */}}
-{{- $headless := false -}}{{/* true if this machine is without keyboard or display */}}
-{{- $personal := false -}}{{/* true if this machine should have personal secrets from 1password */}}
-{{- "" -}}
+{{/* create some booleans */}}
+{{- $personal := false -}}{{/* consider this machine used for personal use */}}
 
+{{- $osid := .chezmoi.os -}}
+{{- if hasKey .chezmoi.osRelease "id" -}}
+{{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
+{{- end -}}
+
+{{/* macOS hostname can be unreliable, this makes it more consistent */}}
 {{- $hostname := .chezmoi.hostname -}}
 {{- if eq .chezmoi.os "darwin" -}}
 {{-   $computerName := output "scutil" "--get" "ComputerName" | trim -}}
@@ -13,14 +17,19 @@
 {{-   end -}}
 {{- end -}}
 
-{{- if eq $hostname "Nicks-MBP" -}}
+{{- if eq $hostname "Nicks-MBP" "Nicks-PC" -}}
 {{-   $personal = true -}}
 {{- end -}}
 
 sourceDir = "{{ .chezmoi.homeDir }}/Projects/rkage/dotfiles"
 
 [data]
-  headless = {{ $headless }}
   hostname = {{ $hostname | quote }}
   personal = {{ $personal }}
+  osid = {{ $osid | quote }}
+{{- if $personal }}
   vault = "r4rtmrkd5kjrwytac2g2ji442a"
+{{- end }}
+
+# [diff]
+#   exclude = ["externals"]

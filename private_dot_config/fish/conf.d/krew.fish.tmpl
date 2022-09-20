@@ -1,0 +1,6 @@
+# determine if krew is installed and configure the bin path
+# vim:filetype=fish:shiftwidth=4
+
+if test -d {{ .chezmoi.homeDir }}/.krew/bin
+    fish_add_path -aP {{ .chezmoi.homeDir }}/.krew/bin
+end

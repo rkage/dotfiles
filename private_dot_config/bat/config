@@ -1,2 +1,6 @@
 --theme="Nord"
+--italic-text=always
+--pager=never
 --plain
+--map-syntax ".ignore:Git Ignore"
+--map-syntax "*.sh.tmpl:Bourne Again Shell (bash)"

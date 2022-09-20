@@ -1,0 +1,16 @@
+# vim:filetype=fish:shiftwidth=4
+
+set -gx PROJECTS {{ .chezmoi.homeDir }}/Projects
+set -x GPG_TTY (tty)
+
+bind -M insert \cg forget
+
+{{ if (and (.personal) (eq .osid "linux-arch")) -}}
+# Start sway/wayland at login
+if status is-login
+  if test -z "$DISPLAY" -a "$XDG_VTNR" = 1
+    exec sway
+  end
+end
+{{ end -}}
+

@@ -1,3 +1,12 @@
 .github
 
+{{- if eq .chezmoi.os "darwin" }}
+.config/sway
+.config/systemd
+{{- end }}
+
+{{- if eq .chezmoi.os "linux" }}
+Library/Application Support/sops
+{{- end }}
+
 README.md
