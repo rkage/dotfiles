@@ -1,0 +1,6 @@
+# if 1password is installed, and it should, use it's SSH_AGENT
+# vim:filetype=fish:shiftwidth=4
+
+if command -sq 1password
+    set -gx SSH_AUTH_SOCK {{ .chezmoi.homeDir }}/.1password/agent.sock
+end
