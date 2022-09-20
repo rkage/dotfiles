@@ -6,7 +6,7 @@
 {{- end }}
 
 {{- if eq .chezmoi.os "linux" }}
-Library/Application Support/sops
+Library/Application Support
 {{- end }}
 
 README.md
