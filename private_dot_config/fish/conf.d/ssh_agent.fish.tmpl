@@ -1,10 +1,10 @@
 # if 1password is installed, and it should, use its SSH_AGENT
 # vim:filetype=fish:shiftwidth=4
 
-{{ if eq .osid "darwin" }}
+{{ if eq .osid "darwin" -}}
 set -gx SSH_AUTH_SOCK {{ .chezmoi.homeDir }}/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
-{{ else if eq .osid "linux-arch" }}
+{{ else if eq .osid "linux-arch" -}}
 if command -sq 1password
     set -gx SSH_AUTH_SOCK {{ .chezmoi.homeDir }}/.1password/agent.sock
 end
-{{ end }}
+{{ end -}}
