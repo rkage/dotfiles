@@ -19,9 +19,8 @@
     gpgsign = true
 
 [delta]
+    features = side-by-side line-numbers decorations
     syntax-theme = Nord
-    line-numbers = true
-    decorations = true
 
 [gpg]
     format = ssh
@@ -37,6 +36,9 @@
 
 [interactive]
     diffFilter = delta --color-only
+
+[add.interactive]
+    useBuiltin = false
 
 [pager]
     branch = false
