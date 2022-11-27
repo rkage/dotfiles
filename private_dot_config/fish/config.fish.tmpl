@@ -6,12 +6,14 @@ set -x GPG_TTY (tty)
 bind -M insert \cg forget
 
 {{ if (and (.personal) (eq .osid "linux-arch")) -}}
+{{   if not (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
 # Start sway/wayland at login
 if status is-login
     if test -z "$DISPLAY" -a "$XDG_VTNR" = 1
         exec sway
     end
 end
+{{-   end }}
 {{- end }}
 
 set -U fish_greeting
