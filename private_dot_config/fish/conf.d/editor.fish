@@ -7,5 +7,6 @@ else
     set -gx EDITOR vim
 end
 
+abbr -a vi $EDITOR
 set -gx VISUAL $EDITOR
 set -gx KUBE_EDITOR $EDITOR
