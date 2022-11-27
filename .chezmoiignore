@@ -1,12 +1,15 @@
 .github
 
-{{- if eq .chezmoi.os "darwin" }}
+# this is temporary until https://github.com/twpayne/chezmoi/issues/1574 is fixed
+.config/nvim
+
+{{- if or (eq .chezmoi.os "darwin") (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
 .config/sway
 .config/systemd
 {{- end }}
 
 {{- if eq .chezmoi.os "linux" }}
-Library/Application Support
+Library
 {{- end }}
 
 README.md
