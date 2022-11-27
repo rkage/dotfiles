@@ -1,5 +1,9 @@
+# vim:filetype=fish:shiftwidth=4
+
 function sudoedit --wraps=doas --description="smooth transition sudo to doas"
     if command -qs doas
-        doas $EDITOR $argv
+        command doas $EDITOR $argv
+    else
+        command sudoedit $argv
     end
 end

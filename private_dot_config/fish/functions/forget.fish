@@ -1,3 +1,5 @@
+# vim:filetype=fish:shiftwidth=4
+
 function forget
     set -l cmd (commandline | string collect)
     printf "\nDo you want to forget '%s'? [Y/n]\n" $cmd
