@@ -2,4 +2,4 @@
   type = "git-repo"
   url = "https://github.com/NvChad/NvChad"
   [".config/nvim".clone]
-    args = ["--depth 1"]
+    args = ["--depth", "1"]
