@@ -1,8 +1,8 @@
 # vim:filetype=fish:shiftwidth=4
 
-function kubectl --wraps=kubectl --description="shorthand for kubectl"
-    if command -qs kubecolor
-        kubecolor $argv
+if command -qs kubecolor
+    function kubectl --wraps=kubecolor --description="shorthand for kubectl"
+        command kubecolor --force-colors $argv
     end
 end
 

@@ -1,12 +1,10 @@
 # vim:filetype=fish:shiftwidth=4
 
-function k --wraps=kubectl --description="shorthand for kubectl"
-    if command -qs kubectl
+if command -qs kubectl
+    function k --wraps=kubectl --description="shorthand for kubectl"
         kubectl $argv
     end
-end
 
-if command -qs kubectl
     abbr -a -U sk 'kubectl -n kube-system'
     abbr -a -U kg 'kubectl get'
     abbr -a -U kgp 'kubectl get po'
