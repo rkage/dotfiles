@@ -5,6 +5,24 @@
 set -gx SSH_AUTH_SOCK {{ .chezmoi.homeDir }}/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
 {{ else if eq .osid "linux-arch" -}}
 if command -sq 1password
+    or command -sq op
     set -gx SSH_AUTH_SOCK {{ .chezmoi.homeDir }}/.1password/agent.sock
+else
+    eval $(ssh-agent -c)
+end
+{{ end -}}
+
+{{ if .chezmoi.kernel.osrelease | lower | contains "microsoft" -}}
+if not ss -a | grep -q "$SSH_AUTH_SOCK"
+    rm -f "$SSH_AUTH_SOCK"
+    set NPIPERELAY_BIN "/usr/local/bin/npiperelay.exe"
+    set ONEPASSWORD_SSH_SOCK "//./pipe/openssh-ssh-agent"
+    if test -x "$NPIPERELAY_BIN"
+        setsid nohup socat UNIX-LISTEN:"$SSH_AUTH_SOCK",fork EXEC:"$NPIPERELAY_BIN -ei -s '$ONEPASSWORD_SSH_SOCK'",nofork >/dev/null 2>&1 &
+        disown
+    else
+        echo >&2 "WARNING: $NPIPERELAY_BIN is not executable."
+    end
+    set --erase NPIPERELAY_BIN
 end
 {{ end -}}
