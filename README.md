@@ -1,39 +1,16 @@
 # dotfiles
 
-My `dotfiles` are intended to support installation on both macOS and Linux (and WSL).
+My `dotfiles`, managed with [`chezmoi`](https://github.com/twpayne/chezmoi).
 
-## macOS
-
-Update macOS and Install Xcode Command-Line Tools
+Personal secrets are stored in [1Password](https://1password.com) and will
+require [1Password CLI](https://developer.1password.com/docs/cli/) installed.
 
 ```shell
-sudo softwareupdate -i -a
-xcode-select --install
+eval $(op signin)
 ```
 
-## Ubuntu Linux (including WSL)
-
-Update Ubuntu and Install necessary tools
+Finally, init chezmoi
 
 ```shell
-sudo apt update && sudo apt upgrade
-sudo apt install build-essential gnupg
-```
-
-Install [homebrew](https://brew.sh)
-
-```shell
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-Install [chezmoi](https://www.chezmoi.io).
-
-```shell
-brew install chezmoi
-```
-
-Init chezmoi
-
-```shell
-chezmoi --source ~/Projects/rkage/dotfiles init git@github.com:rkage/dotfiles.git
+chezmoi init rkage
 ```
