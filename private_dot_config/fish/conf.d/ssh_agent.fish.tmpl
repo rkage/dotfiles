@@ -12,7 +12,8 @@ else
 end
 {{ end -}}
 
-{{ if .chezmoi.kernel.osrelease | lower | contains "microsoft" -}}
+{{ if eq .chezmoi.os "linux" -}}
+{{   if .chezmoi.kernel.osrelease | lower | contains "microsoft" -}}
 if not ss -a | grep -q "$SSH_AUTH_SOCK"
     rm -f "$SSH_AUTH_SOCK"
     set NPIPERELAY_BIN "/usr/local/bin/npiperelay.exe"
@@ -25,4 +26,5 @@ if not ss -a | grep -q "$SSH_AUTH_SOCK"
     end
     set --erase NPIPERELAY_BIN
 end
+{{   end -}}
 {{ end -}}

@@ -9,8 +9,4 @@ Host *
   Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
   ServerAliveInterval 5
   ServerAliveCountMax 1
-{{- if (eq .chezmoi.os "darwin") }}
-  IgnoreUnknown UseKeychain
-  UseKeychain yes
-{{- end }}
 

@@ -1,1 +1,1 @@
-{{ (index (onepasswordItemFields "GitHub" .vault) "email").value }} {{ (index (onepasswordDetailsFields "nick@mcf.io SSH Key" .vault) "public_key").value }}
+{{ onepasswordRead "op://Personal/GitHub/email" .onepasswordAccount }} namespaces="git" {{ onepasswordRead "op://Personal/GitHub SSH Key/public key" .onepasswordAccount }}

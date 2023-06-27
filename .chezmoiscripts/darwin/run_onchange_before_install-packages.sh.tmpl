@@ -1,0 +1,35 @@
+#!{{ lookPath "bash" }}
+# vim:filetype=bash:shiftwidth=2
+
+set -eufo pipefail
+
+{{ $brews := list
+  "bat"
+  "curl"
+  "exa"
+  "fish"
+  "age"
+  "gh"
+  "git"
+  "git-lfs"
+  "git-delta"
+  "gnupg"
+  "jq"
+  "ripgrep"
+  "neovim"
+  "zoxide"
+-}}
+{{ $casks := list
+  "1password-cli"
+  "openlens"
+  "wezterm"
+-}}
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+{{ range ($brews | sortAlpha| uniq) -}}
+brew "{{ . }}"
+{{ end -}}
+{{ range ($casks | sortAlpha| uniq) -}}
+cask "{{ . }}"
+{{ end -}}
+EOF

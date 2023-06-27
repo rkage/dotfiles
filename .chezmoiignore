@@ -3,6 +3,16 @@
 # this is temporary until https://github.com/twpayne/chezmoi/issues/1574 is fixed
 .config/nvim
 
+# include these in darwin/macos only configurations
+{{ if ne .chezmoi.os "darwin" }}
+.chezmoiscripts/darwin/**
+{{ end }}
+
+# include these in linux only configurations
+{{ if ne .chezmoi.os "linux" }}
+.chezmoiscripts/linux/**
+{{ end }}
+
 {{- if or (eq .chezmoi.os "darwin") (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
 .config/sway
 .config/systemd

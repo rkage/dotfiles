@@ -1,11 +1,12 @@
-{{- if .personal -}}
 # git configuration
 # vim:filetype=gitattributes:shiftwidth=4
 
+{{ if .personal -}}
 [user]
-    name = {{ (index (onepasswordItemFields "GitHub" .vault) "name").value }}
-    email = {{ (index (onepasswordItemFields "GitHub" .vault) "email").value }}
-    signingkey = {{ (index (onepasswordDetailsFields "nick@mcf.io SSH Key" .vault) "public_key").value }}
+    name = {{ onepasswordRead "op://Personal/GitHub/name" .onepasswordAccount }}
+    email = {{ onepasswordRead "op://Personal/GitHub/email" .onepasswordAccount }}
+    signingkey = {{ onepasswordRead "op://Personal/GitHub SSH Key/public key" .onepasswordAccount }}
+{{- end }}
 
 [alias]
     co = checkout
@@ -27,6 +28,9 @@
 
 [gpg "ssh"]
     allowedSignersFile = {{ .chezmoi.homeDir }}/.config/git/allowed_signers
+    {{- if eq .chezmoi.os "darwin" }}
+    program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+    {{- end }}
 
 [init]
     defaultBranch = main
@@ -43,7 +47,17 @@
 [pull]
     ff = only
 
-[url "git@github.com:"]
-    pushInsteadOf = http://github.com
-    pushInsteadOf = https://github.com
-{{- end }}
+{{ if .personal -}}
+[url "git@github.com:mcfio"]
+    insteadOf = https://github.com/mcfio/
+[url "git@github.com:rkage"]
+    insteadOf = https://github.com/rkage/
+{{ end -}}
+
+{{ $ghPath := lookPath "gh" -}}
+{{ if $ghPath }}
+[credential "https://github.com"]
+    helper = !{{ $ghPath }} auth git-credential
+[credential "https://gist.github.com"]
+    helper = !{{ $ghPath }} auth git-credential
+{{ end -}}

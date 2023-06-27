@@ -1,0 +1,12 @@
+#!{{ lookPath "fish" }}
+# vim:filetype=fish:shiftwidth=4
+
+type -q fisher || curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+
+fisher install jorgebucaran/autopair.fish
+fisher install wfxr/forgit
+fisher install kidonng/zoxide.fish
+fisher install nickeb96/puffer-fish
+{{ if not (hasKey .chezmoi.kernel "osrelease") -}}
+fisher install franciscolourenco/done
+{{ end -}}

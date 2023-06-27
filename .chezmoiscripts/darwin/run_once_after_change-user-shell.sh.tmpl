@@ -1,0 +1,11 @@
+#!{{ lookPath "bash" }}
+# vim:filetype=bash:shiftwidth=2
+
+set -eufo pipefail
+
+# reqest and store the sudo credentials for 5 minutes
+sudo -v
+
+{{ $fishPath := lookPath "fish" -}}
+echo {{ $fishPath }} | sudo tee -a /etc/shells
+sudo chsh -s {{ $fishPath }} $(whoami)
