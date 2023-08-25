@@ -1,7 +1,7 @@
 {{- if eq .osid "darwin" -}}
 # presume homebrew is installed and will be initialized
 # vim:filetype=fish:shiftwidth=4
-{{- $brewPath := "/usr/local" -}}
+{{ $brewPath := "/opt/homebrew" -}}
 
 eval ({{ $brewPath }}/bin/brew shellenv)
 
