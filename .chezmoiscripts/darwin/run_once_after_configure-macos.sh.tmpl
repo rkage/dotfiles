@@ -1,0 +1,83 @@
+#!{{ lookPath "bash" }}
+# vim:filetype=bash:shiftwidth=2
+
+# Ask for administrator password
+sudo -v
+
+## UX/UI Stuff
+
+# Enable subpixel font smoothing on external displays
+defaults write -globalDomain CGFontRenderingFontSmoothingDisabled -bool NO
+defaults -currentHost write -globalDomain AppleFontSmoothing -int 2
+
+# Avoid screenshot clutter
+defaults write com.apple.screencapture location -string "${HOME}/Desktop/Screenshots"
+defaults write com.apple.screencapture type -string "png"
+defaults write com.apple.screencapture disable-shadow -bool true
+
+# Set compuer name (as if I set it up via System Preferences -> Sharing)
+sudo scutil --set HostName "{{ .hostname }}"
+sudo scutil --set LocalHostName "{{ .hostname }}"
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "{{ .hostname }}"
+
+# Disable some "smart" formatting options, such as automatic captialization (System Preferences -> Keyboard -> Text)
+defaults write -globalDomain NSAutomaticCapitalizationEnabled -bool false
+defaults write -globalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+# Configure bottom-left hot-corner for sleep
+defaults write com.apple.dock wvous-bl-corner -int 10
+defaults write com.apple.dock wvous-bl-modifier -int 0
+
+
+## Finder Stuff
+
+# Show filename extensions and disable warning when changing them
+defaults write NSGlobalDomain AppleShowAllExtensions -boot true
+defaults write com.apple.finder FXEnableExtensionChangingWarning -bool false
+
+# Show path bar and status bar
+defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder ShowStatusBar -bool true
+
+# Show full POSIX path as Finder window title
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+
+# When sorting by name, keep folders on top
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+# Search the current folder by default
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+# Don't creat .DS_Store files on network or USB volumes
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+# Default to list view (other modes: Icons -> `icnv`, Columns -> `clmv`, Gallery -> `glyv`)
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+
+
+### Safari and Webkit Stuff
+## Disabled while determining if these options are configurable from the cli
+
+# Don't send search queries to apple, kinda a privacy thing
+# defaults write com.apple.Safari UniversalSearchEnabled -bool false
+# defaults write com.apple.Safari SuppressSearchSuggestions -bool true
+
+# Enable tab memory, preserve open tabs when quitting safari
+# defaults write com.apple.Safari NSQuitAlwaysKeepsWindows -bool true
+
+# Show the full URL in the address bar (scheme is sitll hidden)
+# defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+
+# Set Safari’s home page to `about:blank` for faster loading
+# defaults write com.apple.Safari HomePage -string "about:blank"
+
+# Prevent Safari from opening ‘safe’ files automatically after downloading
+# defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+
+for app in "Finder" \
+  "Safari" \
+  "SystemUIServer"; do
+  killall "${app}" &> /dev/null
+done
+
