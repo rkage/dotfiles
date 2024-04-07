@@ -19,9 +19,24 @@
 [commit]
     gpgsign = true
 
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+
 [delta]
-    features = side-by-side line-numbers decorations
-    syntax-theme = Dracula
+    features = decorations
+    syntax-theme = Nord
+    plus-style = bold "#002800" "#809575"
+    minus-style = bold "#3f0001" "#94545d"
+
+[delta "decorations"]
+    hunk-header-style = file line-number syntax
+    file-style = omit
+    hunk-header-file-style = blue
+    hunk-header-line-number-style = bold black
+    hunk-header-decoration-style = omit
 
 [gpg]
     format = ssh
