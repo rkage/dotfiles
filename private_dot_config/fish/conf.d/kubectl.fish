@@ -1,6 +1,6 @@
 # vim:filetype=fish:shiftwidth=4
 
-if command -qs kubectl
+if command -qv kubectl
     abbr -a sk 'kubectl -n kube-system'
     abbr -a kg 'kubectl get'
     abbr -a kgp 'kubectl get po'

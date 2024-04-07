@@ -1,12 +1,13 @@
-{{- if eq .osid "darwin" -}}
 # presume homebrew is installed and will be initialized
 # vim:filetype=fish:shiftwidth=4
-{{ $brewPath := "/opt/homebrew" -}}
-
+{{- if eq .osid "darwin" }}
+{{- $brewPath := "/opt/homebrew" }}
 eval ({{ $brewPath }}/bin/brew shellenv)
+{{- end }}
 
 set HOMEBREW_PREFIX (brew --prefix)
 set -gx HOMEBREW_NO_ANALYTICS 1
+set -gx HOMEBREW_NO_ENV_HINTS 1
 
 if test -d "$HOMEBREW_PREFIX/share/fish/completions"
     set -gx fish_complete_path $fish_complete_path "$HOMEBREW_PREFIX/share/fish/completions"
@@ -15,5 +16,3 @@ end
 if test -d "$HOMEBREW_PREFIX/share/fish/vendor_completions.d"
     set -gx fish_complete_path $fish_complete_path "$HOMEBREW_PREFIX/share/fish/vendor_completions.d"
 end
-
-{{- end -}}

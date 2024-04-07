@@ -1,8 +1,8 @@
 # vim:filetype=fish:shiftwidth=4
 
-function watch --description="watch with fish alias support"
+function watch --description "watch with fish alias support"
     if count $argv > /dev/null
-        if command -qs viddy
+        if command -qv viddy
             viddy -t -n 2 --shell fish $argv[1..-1]
         else
             {{- if eq .chezmoi.os "linux" }}

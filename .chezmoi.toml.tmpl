@@ -10,14 +10,14 @@
 {{- $hostname := .chezmoi.hostname -}}
 {{- if eq .chezmoi.os "darwin" -}}
 {{-   $computerName := output "scutil" "--get" "ComputerName" | trim -}}
-{{-   if eq $computerName "Nick’s MacBook Pro" -}}
+{{-   if eq $computerName "Nick's MacBook Pro" -}}
 {{-     $hostname = "Nicks-MBP" -}}
 {{-   else -}}
 {{-     $hostname = $computerName -}}
 {{-   end -}}
 {{- end -}}
 
-{{- if eq $hostname "Nicks-MBP" "Nicks-PC" "Nick's MacBook Pro" -}}
+{{- if eq $hostname "Nicks-MBP" "Nicks-PC" -}}
 {{-   $personal = true -}}
 {{- end -}}
 

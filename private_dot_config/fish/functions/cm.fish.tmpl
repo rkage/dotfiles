@@ -1,6 +1,6 @@
 # vim:filetype=fish:shiftwidth=4
 
-function cm --wraps=chezmoi --description="chezmoi shorthand"
+function cm --wraps chezmoi --description "chezmoi shorthand"
     if string match -q -- "{{ .chezmoi.sourceDir }}" (pwd)
         printf "Do not run chezmoi within the dotfiles directory."
         return

@@ -31,7 +31,7 @@ style = "blue"
 truncation_length = 5
 truncate_to_repo = true
 truncation_symbol = "../"
-read_only	= " "
+read_only = " "
 
 [git_branch]
 format = "[$branch]($style) "
