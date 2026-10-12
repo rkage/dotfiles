@@ -1,24 +1,34 @@
-#!{{ lookPath "bash" }}
-# vim:filetype=bash:shiftwidth=2
+#!/usr/bin/env bash
+# vim: set filetype=bash shiftwidth=2 tabstop=2 expandtab :
+
+# intentionally NOT using `-e`, so one failing `defaults write` (e.g. a
+# key a newer macOS removed) doesn't abort the rest of the script.
+set -uo pipefail
+
+# Close any open System Settings panes, to prevent them from overriding
+# settings we're about to change
+osascript -e 'tell application "System Settings" to quit'
 
 # Ask for administrator password
 sudo -v
 
-## UX/UI Stuff
+# Keep the sudo timestamp alive for the duration of this script, so later
+# `sudo` calls (e.g. scutil) don't stall on a re-prompt
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+SUDO_KEEPALIVE_PID=$!
+trap 'kill "${SUDO_KEEPALIVE_PID}" 2>/dev/null' EXIT
 
-# Enable subpixel font smoothing on external displays
-defaults write -globalDomain CGFontRenderingFontSmoothingDisabled -bool NO
-defaults -currentHost write -globalDomain AppleFontSmoothing -int 2
-
-# Avoid screenshot clutter
-defaults write com.apple.screencapture location -string "${HOME}/Desktop/Screenshots"
-defaults write com.apple.screencapture type -string "png"
-defaults write com.apple.screencapture disable-shadow -bool true
+## UI/UX/QoL items
 
 # Set compuer name (as if I set it up via System Preferences -> Sharing)
 sudo scutil --set HostName "{{ .hostname }}"
 sudo scutil --set LocalHostName "{{ .hostname }}"
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "{{ .hostname }}"
+
+# Avoid screenshot clutter
+defaults write com.apple.screencapture location -string "{{ .chezmoi.homeDir }}/Desktop/Screenshots"
+defaults write com.apple.screencapture type -string "png"
+defaults write com.apple.screencapture disable-shadow -bool true
 
 # Disable some "smart" formatting options, such as automatic captialization (System Preferences -> Keyboard -> Text)
 defaults write -globalDomain NSAutomaticCapitalizationEnabled -bool false
@@ -28,11 +38,16 @@ defaults write -globalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 defaults write com.apple.dock wvous-bl-corner -int 10
 defaults write com.apple.dock wvous-bl-modifier -int 0
 
+# Don't show the "application quit unexpectedly" crash reporter dialog
+defaults write com.apple.CrashReporter DialogType -string "none"
+
+# Unhide ~/Library in Finder
+chflags nohidden "{{ .chezmoi.homeDir }}/Library"
 
 ## Finder Stuff
 
 # Show filename extensions and disable warning when changing them
-defaults write NSGlobalDomain AppleShowAllExtensions -boot true
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 defaults write com.apple.finder FXEnableExtensionChangingWarning -bool false
 
 # Show path bar and status bar
@@ -55,29 +70,8 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 # Default to list view (other modes: Icons -> `icnv`, Columns -> `clmv`, Gallery -> `glyv`)
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
-
-### Safari and Webkit Stuff
-## Disabled while determining if these options are configurable from the cli
-
-# Don't send search queries to apple, kinda a privacy thing
-# defaults write com.apple.Safari UniversalSearchEnabled -bool false
-# defaults write com.apple.Safari SuppressSearchSuggestions -bool true
-
-# Enable tab memory, preserve open tabs when quitting safari
-# defaults write com.apple.Safari NSQuitAlwaysKeepsWindows -bool true
-
-# Show the full URL in the address bar (scheme is sitll hidden)
-# defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
-
-# Set Safari’s home page to `about:blank` for faster loading
-# defaults write com.apple.Safari HomePage -string "about:blank"
-
-# Prevent Safari from opening ‘safe’ files automatically after downloading
-# defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
-
 for app in "Finder" \
-  "Safari" \
+  "Dock" \
   "SystemUIServer"; do
   killall "${app}" &> /dev/null
 done
-

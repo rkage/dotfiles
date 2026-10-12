@@ -1,0 +1,10 @@
+# atuin: Ctrl-R shell history (SQLite: records dir, exit code, duration)
+# Local only: no account is registered, so nothing syncs anywhere.
+auto_sync = false
+update_check = false      # Homebrew handles updates
+search_mode = "fuzzy"
+filter_mode = "global"    # Ctrl-R in the UI cycles global/host/session/directory
+style = "compact"
+inline_height = 20
+enter_accept = false      # Enter puts the command on the line to edit; doesn't run it
+secrets_filter = true     # don't record lines that look like tokens/keys

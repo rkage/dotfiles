@@ -1,0 +1,123 @@
+# vim: set filetype=zsh shiftwidth=2 tabstop=2 expandtab :
+# shellcheck disable=all
+
+# ========================================
+# Shell core (plain zsh, no framework; plugins come from Homebrew)
+# ========================================
+setopt INTERACTIVE_COMMENTS AUTO_CD AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_SILENT
+unsetopt nomatch
+
+# brew --prefix is deterministic per-machine; cache it instead of forking brew repeatedly
+typeset -g HOMEBREW_PREFIX=${HOMEBREW_PREFIX:-$(brew --prefix)}
+
+# Cache each tool's init script instead of spawning it on every startup.
+_cached_init() {  # _cached_init <name> <cmd> [args...]
+  local name=$1; shift
+  local bin=${commands[$1]:A} cache=~/.cache/zsh/init-$name.zsh
+  if [[ ! -s $cache || "$(<$cache.src)" != $bin ]] 2>/dev/null; then
+    mkdir -p ${cache:h} && "$@" >| $cache && print -r -- $bin >| $cache.src
+  fi
+  source $cache
+}
+
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=10000
+setopt APPEND_HISTORY SHARE_HISTORY EXTENDED_HISTORY HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS HIST_IGNORE_SPACE HIST_VERIFY
+
+# ========================================
+# Completion: zsh-autocomplete gives fuzzy matching
+# ========================================
+export LS_COLORS='di=34:ln=36:so=35:pi=33:ex=32:bd=33;01:cd=33;01:su=37;41:sg=30;43:tw=30;42:ow=34;42'
+mkdir -p $HOME/.local/share/zsh
+zstyle ':autocomplete:async' enabled no
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+bindkey '^I' menu-select
+bindkey -M menuselect '^M' .accept-line
+
+# ========================================
+# conf.d-style drop-in dir, after compinit so files can use compdef
+# ========================================
+for f in $HOME/.config/zsh/conf.d/*.zsh(N); do
+  source "$f"
+done
+
+# ========================================
+# Keys: emacs mode, Up/Down search history by what's already typed
+# ========================================
+bindkey -e
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey '^[[A' up-line-or-beginning-search   '^[OA' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search '^[OB' down-line-or-beginning-search
+bindkey '^[[1;5C' forward-word '^[[1;5D' backward-word   # Ctrl-Left/Right
+bindkey '^[[1;3C' forward-word '^[[1;3D' backward-word   # Opt-Left/Right
+bindkey '^[[H' beginning-of-line '^[[F' end-of-line '^[[3~' delete-char
+
+# ========================================
+# Automatically backslash-escape special characters in pasted URLs
+# ========================================
+autoload -Uz bracketed-paste-magic url-quote-magic
+zle -N bracketed-paste bracketed-paste-magic
+zle -N self-insert url-quote-magic
+
+_cached_init starship starship init zsh
+source $HOMEBREW_PREFIX/share/zsh-autopair/autopair.zsh
+source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# ========================================
+# Navigation
+# ========================================
+alias projects='cd $HOME/Projects'
+alias docs='cd $HOME/Documents'
+alias dl='cd $HOME/Downloads'
+alias dt='cd $HOME/Desktop'
+
+alias ..='cd ../'
+alias ...='cd ../../'
+alias ~="cd ~"
+alias f='open -a Finder ./'
+
+_cached_init mise mise activate zsh
+
+# ========================================
+# fzf (Ctrl-T files, Alt-C dirs) + zoxide (z / zi) + atuin (Ctrl-R history)
+# zoxide goes after other cd wrappers; syntax-highlighting below must be last
+# ========================================
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
+
+# Cache each tool's init script instead of spawning it on every startup.
+_cached_init fzf fzf --zsh
+_cached_init zoxide zoxide init zsh
+_cached_init atuin atuin init zsh --disable-up-arrow --disable-ai
+ZSH_AUTOSUGGEST_STRATEGY=(history)
+
+# Nord palette, carried over from fish's fish_frozen_theme.fish
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[default]='fg=#d8dee9'
+ZSH_HIGHLIGHT_STYLES[command]='fg=#88c0d0'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#88c0d0'
+ZSH_HIGHLIGHT_STYLES[function]='fg=#88c0d0'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=#88c0d0'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#88c0d0'
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#81a1c1'
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#81a1c1'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#a3be8c'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#a3be8c'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#a3be8c'
+ZSH_HIGHLIGHT_STYLES[comment]='fg=#4c566a,italic'
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#bf616a'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=#b48ead,bold'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#8fbcbb'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#8fbcbb'
+ZSH_HIGHLIGHT_STYLES[path]='underline'
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]='underline'
+
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+ZSH_HIGHLIGHT_PATTERNS=('rm -rf *' 'fg=white,bold,bg=red')
+source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

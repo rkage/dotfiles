@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# vim: set filetype=bash shiftwidth=2 tabstop=2 expandtab :
+
+# Installs anything in ~/.Brewfile that's missing. Re-runs whenever the
+# rendered Brewfile changes: {{ includeTemplate "dot_Brewfile.tmpl" . | sha256sum }}
+# --no-upgrade: upgrades are topgrade's job, not chezmoi apply's.
+set -uo pipefail
+
+command -v brew >/dev/null || { echo "brew bundle: Homebrew not installed, skipping"; exit 0; }
+brew bundle --global --no-upgrade || echo "brew bundle: some entries failed (non-fatal); run bin/doctor"

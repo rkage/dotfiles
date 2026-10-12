@@ -1,0 +1,4 @@
+[tools]
+"github:home-operations/yayamlls" = "latest"
+"github:home-operations/kopiur" = "latest"
+"github:home-operations/flate" = "latest"

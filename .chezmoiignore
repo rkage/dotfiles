@@ -14,8 +14,6 @@
 {{ end }}
 
 {{- if or (eq .chezmoi.os "darwin") (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
-.config/sway
-.config/systemd
 {{- end }}
 
 {{- if eq .chezmoi.os "linux" }}
