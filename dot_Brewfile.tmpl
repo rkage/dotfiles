@@ -1,0 +1,64 @@
+# vim: set filetype=Helm shiftwidth=2 tabstop=2 expandtab :
+# Install with: brew bundle
+
+{{- $brews := list
+  "git"
+  "python@3.14"
+  "curl"
+  "tree"
+  "git-delta"
+  "fzf"
+  "atuin"
+  "fd"
+  "ripgrep"
+  "jq"
+  "eza"
+  "bat"
+  "starship"
+  "zsh-autocomplete"
+  "zsh-autopair"
+  "zsh-autosuggestions"
+  "zsh-syntax-highlighting"
+  "zoxide"
+  "chezmoi"
+}}
+
+{{- $casks := list
+  "font-symbols-only-nerd-font"
+  "ghostty"
+  "zed"
+}}
+
+{{- if .personal }}
+{{- $brews = concat $brews (list
+  "bash"
+  "mise"
+  "coreutils"
+  "age"
+  "wget"
+  "sops"
+  "mas"
+  "opencode"
+  "mole"
+  "rsync"
+  "unar"
+  "ast-grep"
+) }}
+
+{{- $casks = concat $casks (list
+  "1password-cli"
+  "claude-code@latest"
+) }}
+
+mas "Pages: Create Documents", id: 361309726
+mas "Keynote: Design Presentations", id: 361285480
+mas "Numbers: Make Spreadsheets", id: 361304891
+{{- end }}
+
+{{ range ($brews | sortAlpha | uniq) -}}
+brew "{{ . }}"
+{{ end -}}
+
+{{ range ($casks | sortAlpha | uniq) }}
+cask "{{ . }}"
+{{- end }}

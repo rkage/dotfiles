@@ -1,14 +1,16 @@
+# vim: set filetype=gitattributes shiftwidth=4 tabstop=4 expandtab :
 # git configuration
-# vim:filetype=gitattributes:shiftwidth=4
 
-{{ if .personal -}}
 [user]
-    name = {{ onepasswordRead "op://Personal/GitHub/name" .onepasswordAccount }}
-    email = {{ onepasswordRead "op://Personal/GitHub/email" .onepasswordAccount }}
-    signingkey = {{ onepasswordRead "op://Personal/GitHub SSH Key/public key" .onepasswordAccount }}
-{{- end }}
+    signingkey = {{ onepasswordRead "op://Personal/e2mtrwnrr2yeo4axh2f3ukd3hm/public key" .onepasswordAccount }}
 
 [alias]
+    s = status -sb
+    l = log --graph --decorate --oneline -20
+    la = log --graph --decorate --oneline --all -40
+    last = log -1 HEAD --stat
+    unstage = reset HEAD --
+    amend = commit --amend --no-edit
     co = checkout
     g = grep --break --heading --line-number
     gi = grep --break --heading --line-number -i
@@ -19,11 +21,48 @@
 [commit]
     gpgsign = true
 
+[tag]
+    gpgsign = true
+
+[rebase]
+    autoStash = true
+    autoSquash = true
+    updateRefs = true
+
 [merge]
-    conflictstyle = diff3
+    conflictstyle = zdiff3
+
+[fetch]
+    prune = true
+    pruneTags = true
+
+[push]
+    default = simple
+    autoSetupRemote = true
+    followTags = true
+
+[pull]
+    rebase = true
+    ff = only
 
 [diff]
+    algorithm = histogram
     colorMoved = default
+    colorMovedWs = allow-indentation-change
+    renames = copies
+    mnemonicPrefix = true
+
+[log]
+    date = iso
+
+[help]
+    autocorrect = prompt
+
+[transfer]
+    fsckobjects = true
+
+[diff "sopsdiffer"]
+    textconv = "sops decrypt"
 
 [delta]
     features = decorations
@@ -53,26 +92,34 @@
 [interactive]
     diffFilter = delta --color-only
 
-[add.interactive]
-    useBuiltin = false
-
 [pager]
     branch = false
 
-[pull]
-    ff = only
-
 {{ if .personal -}}
+[includeIf "hasconfig:remote.*.url:git@github.com:**/**"]
+    path = ~/.config/git/config.github
+[includeIf "hasconfig:remote.*.url:git@gitlab.com:**/**"]
+    path = ~/.config/git/config.gitlab
+
+[url "git@gitlab.com:nick.mcfaul/"]
+    insteadOf = https://gitlab.com/nick.mcfaul/
+[url "git@github.com:mcf.io/"]
+    insteadOf = https://gitlab.com/mcf.io/
+[url "git@gitlab.com:"]
+    pushInsteadOf = https://gitlab.com/
+
 [url "git@github.com:mcfio/"]
     insteadOf = https://github.com/mcfio/
 [url "git@github.com:rkage/"]
     insteadOf = https://github.com/rkage/
-{{ end -}}
+[url "git@github.com:"]
+    pushInsteadOf = https://github.com/
+{{- end }}
 
 {{ $ghPath := lookPath "gh" -}}
-{{ if $ghPath }}
+{{ if $ghPath -}}
 [credential "https://github.com"]
     helper = !{{ $ghPath }} auth git-credential
 [credential "https://gist.github.com"]
     helper = !{{ $ghPath }} auth git-credential
-{{ end -}}
+{{- end }}

@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "apiKeyHelper": "/Users/nick/.claude/litellm-key-helper.sh",
+  "cleanupPeriodDays": 365,
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://litellm.milton.mcf.io",
+    "ENABLE_TOOL_SEARCH": "true",
+    "CLAUDE_CODE_AUTO_MODE_SERVER": "0",
+    "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1",
+    "DISABLE_TELEMETRY": "1"
+  },
+  "attribution": {
+    "sessionUrl": false
+  },
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(ls:*)",
+      "Bash(wc:*)",
+      "Bash(sort:*)",
+      "Bash(uniq:*)",
+      "Bash(cut:*)",
+      "Bash(tr:*)",
+      "Bash(diff:*)",
+      "Bash(which:*)",
+      "Bash(jq:*)",
+      "Bash(base64:*)",
+      "Bash(column:*)"
+    ],
+    "additionalDirectories": [
+      "~"
+    ]
+  },
+  "model": "opusplan",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/worktree-hygiene-command.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/notify-command.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "skillOverrides": {
+    "unifi-network:firewall-auditor": "off",
+    "unifi-network:firewall-manager": "off"
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
+  "agentPushNotifEnabled": false,
+  "skipAutoPermissionPrompt": true,
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "unifi-network@unifi-plugins": true,
+    "superpowers@anthropic-plugin-directory": true,
+    "ai-commit-gen@claude-code-plugins-plus": true
+  },
+  "extraKnownMarketplaces": {
+    "unifi-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "sirkirby/unifi-mcp"
+      }
+    },
+    "claude-code-plugins-plus": {
+      "source": {
+        "source": "github",
+        "repo": "jeremylongshore/claude-code-plugins"
+      }
+    }
+  },
+  "awaySummaryEnabled": false,
+  "theme": "dark-ansi",
+  "editorMode": "normal",
+  "preferredNotifChannel": "notifications_disabled",
+  "autoCompactEnabled": true,
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Bash(flate:*) in /Users/nick/Projects/mcfio/talos-n150-cluster",
+      "Bash(egctl:*) in /Users/nick/Projects/mcfio/talos-n150-cluster",
+      "Bash(talosctl get:*), Bash(talosctl version:*), Bash(talosctl health:*) — read-only Talos ops in /Users/nick/Projects/mcfio/talos-n150-cluster"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(talosctl reset:*), Bash(talosctl reboot:*), Bash(talosctl shutdown:*), Bash(talosctl upgrade:*), Bash(talosctl apply-config:*) against talos-* hosts without explicit confirmed intent",
+      "Bash(etcd snapshot restore:*), Bash(etcdctl member remove:*), Bash(talosctl etcd remove-member:*), Bash(talosctl etcd alarm disarm:*)"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: personal Kubernetes home cluster ('milton', domain mcf.io), single operator",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: PUBLIC (mcfio/talos-n150-cluster — any push here is publishing)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: 1Password via External Secrets Operator (ClusterSecretStore)",
+      "**Default / protected branches**: main (protected via ruleset 'main-protection', active)",
+      "**CI/CD deploy targets**: Flux GitOps from github.com/mcfio/talos-n150-cluster; GitHub Actions for PR validation",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine with open internet",
+      "**Source control**: GitHub repo mcfio/talos-n150-cluster (origin: git@github.com:mcfio/talos-n150-cluster.git); pushing to origin is routine and trusted; CI runs on GitHub Actions",
+      "**Trusted internal domains**: *.mcf.io and *.milton.mcf.io — cluster services (grafana, prometheus, alertmanager, victoria-logs, flux, ceph, plex, hass, litellm, requests, status, sabnzbd, mosquitto); resolve to LAN or cloudflared tunnels operated by user",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: LiteLLM API gateway at https://litellm.milton.mcf.io (443, behind Envoy Gateway ingress) — Anthropic-compatible proxy Claude Code routes through; health-checks and normal API traffic are routine, but POSTing decrypted Secret contents, .env files, or bulk file/state dumps to it is exfiltration and stays blocked; in-cluster litellm.default.svc.cluster.local:4000; also Prometheus/Grafana, GitHub Actions on github.com/mcfio",
+      "**Internal package registry**: container images pull from ghcr.io (public), quay.io, gcr.io, registry.k8s.io; no private registry",
+      "**Sensitive data locations & audiences**: all secrets sourced from 1Password via External Secrets Operator; decrypted Secret contents must never leave the cluster; .gitignore flags .private/, *.env, *.agekey, *.key as sensitive-looking",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: Talos nodes talos-node01, talos-node02, talos-node03, talos-stor01, and any host matching talos-* ; destructive talosctl operations (reset, reboot, shutdown, upgrade, apply-config) and destructive etcd operations (snapshot restore, remove-member, alarm disarm) require explicit intent, including untargeted/all-node invocations; read-only ops (get/read/version/health/etcd snapshot save) are routine",
+      "**Protected deployment namespaces / environments**: treat every namespace in this cluster as production per repo philosophy — apply Sensitive remote targets heuristic broadly",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, node-pool resources; anything tagged prod/production as a whole word/segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: GitOps / infrastructure automation for one Kubernetes home cluster",
+      "**Trusted repo**: /Users/nick/Projects/mcfio/talos-n150-cluster and its origin remote github.com/mcfio/talos-n150-cluster.git — repo is PUBLIC, so only this repo's own work belongs in it; content ported from outside this session's repo is not its own work",
+      "**Org-specific CLIs**: flate, hk, egctl, talosctl, flux, kubectl, mise, op (1Password CLI), yq, nu (Nushell), graphify",
+      "Routine under /Users/nick/Projects/mcfio/talos-n150-cluster/ prefix: kubectl, flux, flate, hk, mise, yq operations scoped to this repo/cluster"
+    ]
+  }
+}

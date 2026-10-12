@@ -1,0 +1,24 @@
+# vim: set filetype=zsh shiftwidth=2 tabstop=2 expandtab :
+# shellcheck disable=all
+
+# Static equivalent of `eval "$(/opt/homebrew/bin/brew shellenv)"`, which
+# spawns brew (~25ms) on every login shell. Regenerate with `brew shellenv zsh`
+# if Homebrew ever moves.
+
+export HOMEBREW_PREFIX="/opt/homebrew";
+export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+export HOMEBREW_REPOSITORY="/opt/homebrew";
+fpath[1,0]="/opt/homebrew/share/zsh/site-functions";
+export FPATH;
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
+[ -z "${MANPATH-}" ] || { export MANPATH="${MANPATH%"${MANPATH##*[!:]}"}"; export MANPATH=":${MANPATH#"${MANPATH%%[!:]*}"}"; };
+export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+
+export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_ENV_HINTS=1
+
+# Keg-only curl (OpenSSL, HTTP/3) ahead of system curl.
+if [ -x /opt/homebrew/opt/curl/bin/curl ]; then
+  export HOMEBREW_FORCE_BREWED_CURL=1
+  export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+fi
