@@ -1,0 +1,6 @@
+Host *.internal
+  User mcfadmin
+  RequestTTY yes
+
+  Match host *.internal sessiontype shell
+      RemoteCommand tmux new -A -s default
