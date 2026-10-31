@@ -3,4 +3,6 @@ Host *.internal
   RequestTTY yes
 
   Match host *.internal sessiontype shell
+      PermitLocalCommand yes
+      LocalCommand rsync -q -e "ssh -F /dev/null -o User=%r" ~/.config/tmux/remote.tmux.conf %n:.tmux.conf
       RemoteCommand tmux new -A -s default
