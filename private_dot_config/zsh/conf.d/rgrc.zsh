@@ -1,5 +1,5 @@
 # vim: set filetype=zsh shiftwidth=2 tabstop=2 expandtab :
-# shellcheck disable=all
+# shellcheck disable=SC2034,SC2153,SC2086,SC2155
 
 if (( ${+commands[rgrc]} )); then
   alias curl='rgrc curl'

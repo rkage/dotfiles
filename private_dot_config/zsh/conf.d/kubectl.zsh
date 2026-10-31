@@ -1,7 +1,8 @@
 # vim: set filetype=zsh shiftwidth=2 tabstop=2 expandtab :
-# shellcheck disable=all
+# shellcheck disable=SC2034,SC2153,SC2086,SC2155
 
 if (( ${+commands[kubectl]} )); then
+  alias k='kubectl'
   alias sk='kubectl -n kube-system'
   alias kg='kubectl get'
   alias kgp='kubectl get po'
@@ -22,6 +23,7 @@ if (( ${+commands[kubectl]} )); then
 fi
 
 if (( ${+commands[kubecolor]} )); then
+  export KUBECOLOR_FORCE_COLORS=auto
   alias kubectl='kubecolor'
   compdef kubecolor='kubectl'
 fi
