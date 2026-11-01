@@ -22,3 +22,8 @@ if [ -x /opt/homebrew/opt/curl/bin/curl ]; then
   export HOMEBREW_FORCE_BREWED_CURL=1
   export PATH="/opt/homebrew/opt/curl/bin:$PATH"
 fi
+
+# 1Password SSH agent. IdentityAgent in ~/.ssh/config is the canonical
+# source (covers GUI apps, VS Code Remote-SSH, launchd agents, etc.);
+# this export just lets ad-hoc tools and nested shells find it too.
+export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"

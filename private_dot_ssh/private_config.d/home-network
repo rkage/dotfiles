@@ -1,8 +1,11 @@
+# vim: set filetype=ssh_config shiftwidth=2 tabstop=2 expandtab :
+
 Host *.internal
+  Tag internal
   User mcfadmin
   RequestTTY yes
 
-  Match host *.internal sessiontype shell
+  Match tagged internal sessiontype shell
       PermitLocalCommand yes
-      LocalCommand rsync -q -e "ssh -F /dev/null -o User=%r" ~/.config/tmux/remote.tmux.conf %n:.tmux.conf
+      LocalCommand rsync -qL -e "ssh -F /dev/null -o User=%r" ~/.config/tmux/remote.tmux.conf %n:.tmux.conf
       RemoteCommand tmux new -A -s default
