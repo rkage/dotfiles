@@ -1,0 +1,19 @@
+[".config/nvim"]
+  type = "git-repo"
+  url = "https://github.com/NvChad/NvChad"
+  [".config/nvim".clone]
+    args = ["--depth", "1"]
+
+{{- $fontsDir := "" }}
+{{- if eq .chezmoi.os "darwin" }}
+{{-   $fontsDir = "Library/Fonts/MonoLisa" }}
+{{- else }}
+{{-   $fontsDir = ".local/share/fonts/MonoLisa" }}
+{{- end }}
+
+[{{ $fontsDir | quote }}]
+  type = "git-repo"
+  url = "https://github.com/rkage/fonts-private"
+  refreshPeriod = "168h"
+  [{{ $fontsDir | quote }}.clone]
+    args = ["--depth", "1"]
